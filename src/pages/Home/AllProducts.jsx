@@ -5,16 +5,20 @@ const AllProducts = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
+    const [brand, setBrand] = useState('');
+    const [category, setCategory] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
     const limit = 10;
 
     useEffect(() => {
-        fetch(`http://localhost:5000/products?page=${currentPage}&limit=${limit}&search=${searchTerm}`)
+        fetch(`http://localhost:5000/products?page=${currentPage}&limit=${limit}&search=${searchTerm}&brand=${brand}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}`)
             .then(res => res.json())
             .then(data => {
                 setProducts(data.products);
                 setTotalPages(data.totalPages);
             });
-    }, [currentPage, searchTerm]);
+    }, [currentPage, searchTerm, brand, category, minPrice, maxPrice]);
 
     const handlePrevious = () => {
         if (currentPage > 1) {
@@ -30,11 +34,68 @@ const AllProducts = () => {
 
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
-        setCurrentPage(1); // Reset to first page on new search
+        setCurrentPage(1);
+    };
+
+    const handleBrandChange = (e) => {
+        setBrand(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleCategoryChange = (e) => {
+        setCategory(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleMinPriceChange = (e) => {
+        setMinPrice(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleMaxPriceChange = (e) => {
+        setMaxPrice(e.target.value);
+        setCurrentPage(1);
     };
 
     return (
         <div className="max-w-7xl mx-auto">
+            {/* Filters */}
+            <div className="my-4 flex space-x-4">
+                {/* Brand Filter */}
+                <input
+                    type="text"
+                    placeholder="Filter by brand..."
+                    value={brand}
+                    onChange={handleBrandChange}
+                    className="p-2 border border-gray-300 rounded"
+                />
+
+                {/* Category Filter */}
+                <input
+                    type="text"
+                    placeholder="Filter by category..."
+                    value={category}
+                    onChange={handleCategoryChange}
+                    className="p-2 border border-gray-300 rounded"
+                />
+
+                {/* Price Range Filter */}
+                <input
+                    type="number"
+                    placeholder="Min price"
+                    value={minPrice}
+                    onChange={handleMinPriceChange}
+                    className="p-2 border border-gray-300 rounded"
+                />
+                <input
+                    type="number"
+                    placeholder="Max price"
+                    value={maxPrice}
+                    onChange={handleMaxPriceChange}
+                    className="p-2 border border-gray-300 rounded"
+                />
+            </div>
+
             {/* Search Input */}
             <div className="my-4">
                 <input
