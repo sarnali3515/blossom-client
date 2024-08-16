@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { FiSearch } from 'react-icons/fi';
+
 
 const AllProducts = () => {
     const [products, setProducts] = useState([]);
@@ -64,64 +66,80 @@ const AllProducts = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto">
-            {/* Filters */}
-            <div className="my-4 flex space-x-4">
-                {/* Brand Filter */}
-                <input
-                    type="text"
-                    placeholder="Filter by brand..."
-                    value={brand}
-                    onChange={handleBrandChange}
-                    className="p-2 border border-gray-300 rounded"
-                />
+        <div className="max-w-7xl mx-auto mb-8">
+            <div className="flex p-4 justify-between flex-col-reverse md:flex-row bg-pink-300">
+                {/* Filters */}
+                <div className="my-4 flex space-x-4 ">
+                    {/* Brand Filter */}
+                    <input
+                        type="text"
+                        placeholder="Filter by brand..."
+                        value={brand}
+                        onChange={handleBrandChange}
+                        className="p-2 border border-gray-300 rounded"
+                    />
 
-                {/* Category Filter */}
-                <input
-                    type="text"
-                    placeholder="Filter by category..."
-                    value={category}
-                    onChange={handleCategoryChange}
-                    className="p-2 border border-gray-300 rounded"
-                />
+                    {/* Category Filter */}
+                    <input
+                        type="text"
+                        placeholder="Filter by category..."
+                        value={category}
+                        onChange={handleCategoryChange}
+                        className="p-2 border border-gray-300 rounded"
+                    />
 
-                {/* Price Range Filter */}
-                <input
-                    type="number"
-                    placeholder="Min price"
-                    value={minPrice}
-                    onChange={handleMinPriceChange}
-                    className="p-2 border border-gray-300 rounded"
-                />
-                <input
-                    type="number"
-                    placeholder="Max price"
-                    value={maxPrice}
-                    onChange={handleMaxPriceChange}
-                    className="p-2 border border-gray-300 rounded"
-                />
-            </div>
+                    {/* Price Range Filter */}
+                    <input
+                        type="number"
+                        placeholder="Min price"
+                        value={minPrice}
+                        onChange={handleMinPriceChange}
+                        className="p-2 border border-gray-300 rounded"
+                    />
+                    <input
+                        type="number"
+                        placeholder="Max price"
+                        value={maxPrice}
+                        onChange={handleMaxPriceChange}
+                        className="p-2 border border-gray-300 rounded"
+                    />
+                </div>
 
-            {/* Search Input */}
-            <div className="my-4">
-                <input
-                    type="text"
-                    placeholder="Search products by name..."
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    className="w-full p-2 border border-gray-300 rounded"
-                />
+
+                {/* Search Input */}
+                <div className="my-4 flex items-center">
+                    <div className="relative w-full">
+                        <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <FiSearch
+                                className="text-pink-500" />
+                        </span>
+                        <input
+                            type="text"
+                            placeholder="Search products by name"
+                            value={searchTerm}
+                            onChange={handleSearch}
+                            className="w-full p-2 pl-10 border border-pink-300 rounded"
+                        />
+                    </div>
+                </div>
+
             </div>
 
             {/* Sorting Controls */}
-            <div className="my-4 flex space-x-4">
-                <select value={sort} onChange={handleSortChange} className="p-2 border border-gray-300 rounded">
-                    <option value="">Sort by</option>
-                    <option value="price-asc">Price: Low to High</option>
-                    <option value="price-desc">Price: High to Low</option>
-                    <option value="date-desc">Date Added: Newest First</option>
+            <div className="my-4 flex items-center justify-center space-x-4">
+                <select
+                    value={sort}
+                    onChange={handleSortChange}
+                    className="p-2 border border-pink-400 rounded"
+                >
+                    <option value="" className="hover:bg-pink-500">Sort by</option>
+                    <option value="price-asc" className="hover:bg-pink-500">Price: Low to High</option>
+                    <option value="price-desc" className="hover:bg-pink-500">Price: High to Low</option>
+                    <option value="date-desc" className="hover:bg-pink-500">Date Added: Newest First</option>
                 </select>
             </div>
+
+
 
             {/* Product Grid */}
             <div className="grid grid-cols-3 gap-5">
@@ -140,6 +158,7 @@ const AllProducts = () => {
                                 </div>
                                 <p className='text-base mt-3 text-gray-800'>{product.description}</p>
                                 <p className='text-black text-base mt-2'><span className='font-semibold'>Brand:</span> {product.brandName}</p>
+                                <p className='text-black text-base mt-2'><span className='font-semibold'>Date:</span> {product.creationDate}</p>
                                 <div className='flex justify-between '>
                                     <p className='text-black text-base mt-2'><span className='font-semibold'>Ratings:</span> {product.ratings}</p>
                                     <p className='text-pink-600 btn hover:bg-pink-500 btn-xs bg-transparent border-pink-600 text-sm mt-2 font-bold'>{product.category} </p>
@@ -151,19 +170,19 @@ const AllProducts = () => {
             </div>
 
             {/* Pagination Controls */}
-            <div className="flex justify-center mt-6">
+            <div className="flex justify-center mt-8">
                 <button
                     onClick={handlePrevious}
                     disabled={currentPage === 1}
-                    className="px-4 py-2 mx-2 bg-gray-300 text-black rounded disabled:bg-gray-200"
+                    className="px-4 py-2 mx-2 font-semibold bg-pink-500 text-white rounded-3xl disabled:bg-gray-300 disabled:text-black"
                 >
                     Previous
                 </button>
-                <p className="mx-2">Page {currentPage} of {totalPages}</p>
+                <p className="m-3">Page {currentPage} of {totalPages}</p>
                 <button
                     onClick={handleNext}
                     disabled={currentPage === totalPages}
-                    className="px-4 py-2 mx-2 bg-gray-300 text-black rounded disabled:bg-gray-200"
+                    className="px-4 py-2 mx-2 font-semibold bg-pink-500 text-white rounded-3xl disabled:bg-gray-300 disabled:text-black"
                 >
                     Next
                 </button>
