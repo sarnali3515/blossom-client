@@ -4,16 +4,17 @@ const AllProducts = () => {
     const [products, setProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const limit = 6;
+    const [searchTerm, setSearchTerm] = useState('');
+    const limit = 10;
 
     useEffect(() => {
-        fetch(`http://localhost:5000/products?page=${currentPage}&limit=${limit}`)
+        fetch(`http://localhost:5000/products?page=${currentPage}&limit=${limit}&search=${searchTerm}`)
             .then(res => res.json())
             .then(data => {
                 setProducts(data.products);
                 setTotalPages(data.totalPages);
             });
-    }, [currentPage]);
+    }, [currentPage, searchTerm]);
 
     const handlePrevious = () => {
         if (currentPage > 1) {
@@ -27,14 +28,31 @@ const AllProducts = () => {
         }
     };
 
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1); // Reset to first page on new search
+    };
+
     return (
         <div className="max-w-7xl mx-auto">
+            {/* Search Input */}
+            <div className="my-4">
+                <input
+                    type="text"
+                    placeholder="Search products by name..."
+                    value={searchTerm}
+                    onChange={handleSearch}
+                    className="w-full p-2 border border-gray-300 rounded"
+                />
+            </div>
+
+            {/* Product Grid */}
             <div className="grid grid-cols-3 gap-5">
                 {products.map(product => (
                     <div key={product._id} className="">
                         <div className="card w-full md:h-[500px] bg-pink-100 rounded-lg border border-pink-300">
                             <figure className="bg-white">
-                                <img src={product.productImage} alt="Shoes" className="h-5/6" />
+                                <img src={product.productImage} alt="Product" className="h-5/6" />
                             </figure>
                             <div className="p-4 text-left">
                                 <div className="flex justify-between">
@@ -55,7 +73,7 @@ const AllProducts = () => {
                 ))}
             </div>
 
-            {/* Pagination */}
+            {/* Pagination Controls */}
             <div className="flex justify-center mt-6">
                 <button
                     onClick={handlePrevious}
