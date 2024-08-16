@@ -1,4 +1,5 @@
-import AllProducts from "./AllProducts";
+import AllProducts from "./Allproducts";
+
 
 
 const Home = () => {
