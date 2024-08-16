@@ -9,16 +9,17 @@ const AllProducts = () => {
     const [category, setCategory] = useState('');
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
-    const limit = 10;
+    const [sort, setSort] = useState('');
+    const limit = 6;
 
     useEffect(() => {
-        fetch(`http://localhost:5000/products?page=${currentPage}&limit=${limit}&search=${searchTerm}&brand=${brand}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}`)
+        fetch(`http://localhost:5000/products?page=${currentPage}&limit=${limit}&search=${searchTerm}&brand=${brand}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}`)
             .then(res => res.json())
             .then(data => {
                 setProducts(data.products);
                 setTotalPages(data.totalPages);
             });
-    }, [currentPage, searchTerm, brand, category, minPrice, maxPrice]);
+    }, [currentPage, searchTerm, brand, category, minPrice, maxPrice, sort]);
 
     const handlePrevious = () => {
         if (currentPage > 1) {
@@ -54,6 +55,11 @@ const AllProducts = () => {
 
     const handleMaxPriceChange = (e) => {
         setMaxPrice(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleSortChange = (e) => {
+        setSort(e.target.value);
         setCurrentPage(1);
     };
 
@@ -105,6 +111,16 @@ const AllProducts = () => {
                     onChange={handleSearch}
                     className="w-full p-2 border border-gray-300 rounded"
                 />
+            </div>
+
+            {/* Sorting Controls */}
+            <div className="my-4 flex space-x-4">
+                <select value={sort} onChange={handleSortChange} className="p-2 border border-gray-300 rounded">
+                    <option value="">Sort by</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="date-desc">Date Added: Newest First</option>
+                </select>
             </div>
 
             {/* Product Grid */}
