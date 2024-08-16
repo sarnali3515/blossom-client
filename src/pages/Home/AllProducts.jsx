@@ -125,7 +125,7 @@ const AllProducts = () => {
 
             </div>
 
-            {/* Sorting Controls */}
+            {/* Sorting */}
             <div className="my-4 flex items-center justify-center space-x-4">
                 <select
                     value={sort}
@@ -169,7 +169,7 @@ const AllProducts = () => {
                 ))}
             </div>
 
-            {/* Pagination Controls */}
+            {/* Pagination*/}
             <div className="flex justify-center mt-8">
                 <button
                     onClick={handlePrevious}
