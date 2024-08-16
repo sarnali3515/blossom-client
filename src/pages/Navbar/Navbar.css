@@ -1,0 +1,10 @@
+ul li a.active {
+    background: none !important;
+    font-weight: 700;
+    border-radius: 15px;
+    color: rgb(192, 34, 121) !important;
+}
+
+ul li :hover {
+    color: rgb(179, 60, 125)
+}
