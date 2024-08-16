@@ -69,7 +69,7 @@ const AllProducts = () => {
         <div className="max-w-7xl mx-auto mb-8">
             <div className="flex p-4 justify-between flex-col-reverse md:flex-row bg-pink-300">
                 {/* Filters */}
-                <div className="my-4 flex space-x-4 ">
+                <div className="my-4 grid grid-cols-2 md:grid-cols-4 md:space-x-4 ">
                     {/* Brand Filter */}
                     <input
                         type="text"
@@ -142,12 +142,12 @@ const AllProducts = () => {
 
 
             {/* Product Grid */}
-            <div className="grid grid-cols-3 gap-5">
+            <div className="grid md:grid-cols-3 gap-5">
                 {products.map(product => (
                     <div key={product._id} className="">
-                        <div className="card w-full md:h-[500px] bg-pink-100 rounded-lg border border-pink-300">
+                        <div className="card w-full h-[500px] bg-pink-100 rounded-lg border border-pink-300">
                             <figure className="bg-white">
-                                <img src={product.productImage} alt="Product" className="h-5/6" />
+                                <img src={product.productImage} alt="Product" className="h-full p-5 md:h-5/6" />
                             </figure>
                             <div className="p-4 text-left">
                                 <div className="flex justify-between">

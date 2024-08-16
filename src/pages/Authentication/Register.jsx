@@ -88,8 +88,8 @@ const Register = () => {
                     <h1 className="text-2xl md:text-5xl font-semibold text-pink-900 mt-5">Welcome to Blossom!</h1>
 
                 </div>
-                <div className="card w-full  shadow-2xl bg-pink-100">
-                    <h1 className="text-center font-bold text-4xl pt-2">Register</h1>
+                <div className="card w-full  shadow-2xl bg-pink-200">
+                    <h1 className="text-center font-bold text-xl md:text-4xl pt-2">Register</h1>
                     <form onSubmit={handleRegister} className="card-body">
                         <div className="form-control">
                             <label className="label">
