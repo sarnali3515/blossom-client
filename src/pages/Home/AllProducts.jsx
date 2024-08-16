@@ -15,7 +15,7 @@ const AllProducts = () => {
     const limit = 6;
 
     useEffect(() => {
-        fetch(`http://localhost:5000/products?page=${currentPage}&limit=${limit}&search=${searchTerm}&brand=${brand}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}`)
+        fetch(`https://blossom-server-two.vercel.app/products?page=${currentPage}&limit=${limit}&search=${searchTerm}&brand=${brand}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}`)
             .then(res => res.json())
             .then(data => {
                 setProducts(data.products);
