@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FiSearch } from 'react-icons/fi';
+import { AuthContext } from "../../providers/AuthProvider";
 
 
 const AllProducts = () => {
@@ -13,6 +14,8 @@ const AllProducts = () => {
     const [maxPrice, setMaxPrice] = useState('');
     const [sort, setSort] = useState('');
     const limit = 6;
+    const { loading } = useContext(AuthContext);
+
 
     useEffect(() => {
         fetch(`https://blossom-server-two.vercel.app/products?page=${currentPage}&limit=${limit}&search=${searchTerm}&brand=${brand}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}`)
@@ -64,6 +67,11 @@ const AllProducts = () => {
         setSort(e.target.value);
         setCurrentPage(1);
     };
+    if (loading) {
+        return <div className="text-center my-4 md:my-6">
+            <span className="loading loading-lg loading-spinner text-success"></span>
+        </div>
+    }
 
     return (
         <div className="max-w-7xl mx-auto mb-8">
