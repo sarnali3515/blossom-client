@@ -1,7 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FiSearch } from 'react-icons/fi';
-import { AuthContext } from "../../providers/AuthProvider";
-
 
 const AllProducts = () => {
     const [products, setProducts] = useState([]);
@@ -13,16 +11,17 @@ const AllProducts = () => {
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
     const [sort, setSort] = useState('');
+    const [loading, setLoading] = useState(false); // Loading state
     const limit = 6;
-    const { loading } = useContext(AuthContext);
-
 
     useEffect(() => {
+        setLoading(true); // Start loading
         fetch(`https://blossom-server-two.vercel.app/products?page=${currentPage}&limit=${limit}&search=${searchTerm}&brand=${brand}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sort=${sort}`)
             .then(res => res.json())
             .then(data => {
                 setProducts(data.products);
                 setTotalPages(data.totalPages);
+                setLoading(false); // Stop loading
             });
     }, [currentPage, searchTerm, brand, category, minPrice, maxPrice, sort]);
 
@@ -67,11 +66,6 @@ const AllProducts = () => {
         setSort(e.target.value);
         setCurrentPage(1);
     };
-    if (loading) {
-        return <div className="text-center my-4 md:my-6">
-            <span className="loading loading-lg loading-spinner text-success"></span>
-        </div>
-    }
 
     return (
         <div className="max-w-7xl mx-auto mb-8">
@@ -81,7 +75,7 @@ const AllProducts = () => {
                     {/* Brand Filter */}
                     <input
                         type="text"
-                        placeholder="Filter by brand..."
+                        placeholder="Filter by brand"
                         value={brand}
                         onChange={handleBrandChange}
                         className="p-2 border border-gray-300 rounded"
@@ -90,7 +84,7 @@ const AllProducts = () => {
                     {/* Category Filter */}
                     <input
                         type="text"
-                        placeholder="Filter by category..."
+                        placeholder="Filter by category"
                         value={category}
                         onChange={handleCategoryChange}
                         className="p-2 border border-gray-300 rounded"
@@ -113,13 +107,11 @@ const AllProducts = () => {
                     />
                 </div>
 
-
                 {/* Search Input */}
                 <div className="my-4 flex items-center">
                     <div className="relative w-full">
                         <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FiSearch
-                                className="text-pink-500" />
+                            <FiSearch className="text-pink-500" />
                         </span>
                         <input
                             type="text"
@@ -147,54 +139,62 @@ const AllProducts = () => {
                 </select>
             </div>
 
-
-
-            {/* Product Grid */}
-            <div className="grid md:grid-cols-3 gap-5">
-                {products.map(product => (
-                    <div key={product._id} className="">
-                        <div className="card w-full h-[500px] bg-pink-100 rounded-lg border border-pink-300">
-                            <figure className="bg-white">
-                                <img src={product.productImage} alt="Product" className="h-full p-5 md:h-5/6" />
-                            </figure>
-                            <div className="p-4 text-left">
-                                <div className="flex justify-between">
-                                    <h2 className="font-bold text-xl  text-black">{product.productName}</h2>
-                                    <h2 className="font-bold text-lg  text-pink-600">
-                                        $ {product.price}
-                                    </h2>
-                                </div>
-                                <p className='text-base mt-3 text-gray-800'>{product.description}</p>
-                                <p className='text-black text-base mt-2'><span className='font-semibold'>Brand:</span> {product.brandName}</p>
-                                <p className='text-black text-base mt-2'><span className='font-semibold'>Date:</span> {product.creationDate}</p>
-                                <div className='flex justify-between '>
-                                    <p className='text-black text-base mt-2'><span className='font-semibold'>Ratings:</span> {product.ratings}</p>
-                                    <p className='text-pink-600 btn hover:bg-pink-500 btn-xs bg-transparent border-pink-600 text-sm mt-2 font-bold'>{product.category} </p>
+            {/* Loading Indicator */}
+            {loading ? (
+                <div className="flex justify-center items-center">
+                    <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-pink-500"></div>
+                    <p className="text-pink-500 ml-4">Loading...</p>
+                </div>
+            ) : (
+                <>
+                    {/* Product Grid */}
+                    <div className="grid md:grid-cols-3 gap-5">
+                        {products.map(product => (
+                            <div key={product._id} className="">
+                                <div className="card w-full h-[500px] bg-pink-100 rounded-lg border border-pink-300">
+                                    <figure className="bg-white">
+                                        <img src={product.productImage} alt="Product" className="h-full p-5 md:h-5/6" />
+                                    </figure>
+                                    <div className="p-4 text-left">
+                                        <div className="flex justify-between">
+                                            <h2 className="font-bold text-xl text-black">{product.productName}</h2>
+                                            <h2 className="font-bold text-lg text-pink-600">
+                                                $ {product.price}
+                                            </h2>
+                                        </div>
+                                        <p className='text-base mt-3 text-gray-800'>{product.description}</p>
+                                        <p className='text-black text-base mt-2'><span className='font-semibold'>Brand:</span> {product.brandName}</p>
+                                        <p className='text-black text-base mt-2'><span className='font-semibold'>Date:</span> {product.creationDate}</p>
+                                        <div className='flex justify-between '>
+                                            <p className='text-black text-base mt-2'><span className='font-semibold'>Ratings:</span> {product.ratings}</p>
+                                            <p className='text-pink-600 btn hover:bg-pink-500 btn-xs bg-transparent border-pink-600 text-sm mt-2 font-bold'>{product.category} </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        ))}
                     </div>
-                ))}
-            </div>
 
-            {/* Pagination*/}
-            <div className="flex justify-center mt-8">
-                <button
-                    onClick={handlePrevious}
-                    disabled={currentPage === 1}
-                    className="px-4 py-2 mx-2 font-semibold bg-pink-500 text-white rounded-3xl disabled:bg-gray-300 disabled:text-black"
-                >
-                    Previous
-                </button>
-                <p className="m-3">Page {currentPage} of {totalPages}</p>
-                <button
-                    onClick={handleNext}
-                    disabled={currentPage === totalPages}
-                    className="px-4 py-2 mx-2 font-semibold bg-pink-500 text-white rounded-3xl disabled:bg-gray-300 disabled:text-black"
-                >
-                    Next
-                </button>
-            </div>
+                    {/* Pagination */}
+                    <div className="flex justify-center mt-8">
+                        <button
+                            onClick={handlePrevious}
+                            disabled={currentPage === 1}
+                            className="px-4 py-2 mx-2 font-semibold bg-pink-500 text-white rounded-3xl disabled:bg-gray-300 disabled:text-black"
+                        >
+                            Previous
+                        </button>
+                        <p className="m-3">Page {currentPage} of {totalPages}</p>
+                        <button
+                            onClick={handleNext}
+                            disabled={currentPage === totalPages}
+                            className="px-4 py-2 mx-2 font-semibold bg-pink-500 text-white rounded-3xl disabled:bg-gray-300 disabled:text-black"
+                        >
+                            Next
+                        </button>
+                    </div>
+                </>
+            )}
         </div>
     );
 };
